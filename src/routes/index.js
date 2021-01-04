@@ -8,6 +8,19 @@ let isAuth = () => {
   let token = localStorage.getItem("token");
   return token ? true : false;
 };
+const routersConfig = [
+  {
+    path: "/login",
+    component: Login,
+    hidden: true,
+    exact: true,
+  },
+  {
+    path: "*",
+    component: NoPage,
+    hidden:true
+  }
+]
 const routes = [
     {
       path: "/home",
@@ -47,19 +60,10 @@ const routes = [
       redirect: "/home/index",
       isAuth: isAuth(),
       exact: true,
-    },
-    {
-      path: "/login",
-      component: Login,
-      hidden: true,
-      exact: true,
-    },
-    {
-      path: "*",
-      component: NoPage,
-      hidden:true
-    },
+    }
   ];
-
-  export { default as NoPage } from '../components/NoPage/index'
-  export default routes
+  export {
+    routersConfig,
+    routes,
+    NoPage
+  }

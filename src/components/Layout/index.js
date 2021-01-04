@@ -12,20 +12,18 @@ import {
     Route,
     Switch
 } from 'react-router-dom'
-import {RoutesContext} from '../../RoutesContext/index'
-
-export default class extends React.Component {
-    static contextType = RoutesContext
-    constructor(props) {
+import { connect } from 'react-redux'
+import {reset} from '../../actions/index'
+class Layout extends React.Component{
+    constructor(props){
         super(props)
         this.logout = this.logout.bind(this)
     }
     logout(){
-        let {change} = this.context
         let {history} = this.props
         localStorage.removeItem('token')
         history.replace('/login')
-        change()
+        this.props.logout()
     }
     render() {
         const { children, routes, pitem } = this.props
@@ -54,3 +52,15 @@ export default class extends React.Component {
         )
     }
 }
+
+
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        logout: () => {
+            dispatch(reset())
+        }
+    }
+}
+
+export default connect(null, mapDispatchToProps)(Layout)

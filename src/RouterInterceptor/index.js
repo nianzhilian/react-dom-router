@@ -3,28 +3,22 @@
  */
 import React ,{Suspense}from 'react';
 import { NoPage } from '../routes/index'
-/**
- * 路由上下文
- * 好处是不需要一层一层的通过props往下传递路由数组
- */
-import {RoutesContext} from '../RoutesContext/index'
 import {
     BrowserRouter as Router,
     Route,
     Switch,
-    Redirect,
-    withRouter
+    Redirect
 } from 'react-router-dom'
+import { connect } from 'react-redux';
+import {routersConfig} from '../routes/index'
+
 
 class RouterInterceptor extends React.Component {
     constructor(props) {
         super(props)
     }
-    componentDidMount(){
-        console.log(localStorage.getItem('token'))
-    }
     render() {
-        const {routes} = this.context
+        const {routes} = this.props;
         return (
             <Suspense fallback={<div>正在加载中</div>}>
                 <Switch>
@@ -35,6 +29,7 @@ class RouterInterceptor extends React.Component {
                                 key={i}
                                 exact={item.exact}
                                 render={(routerProps) => {
+                                    console.log(routerProps.location)
                                     //item.isAuth = localStorage.getItem('token')
                                     if (item.isAuth) {
                                         if (item.children) {
@@ -54,6 +49,14 @@ class RouterInterceptor extends React.Component {
                                         }
                                     } else {
                                         if (item.hidden) {
+                                            if(routerProps.location.pathname=='/'){
+                                               return <Redirect
+                                                    to={{
+                                                        pathname: "/login",
+                                                        state: { from: routerProps.location },
+                                                    }}
+                                                />
+                                            }
                                             return <item.component {...routerProps} />;
                                         }
                                         return (
@@ -75,6 +78,10 @@ class RouterInterceptor extends React.Component {
     }
 }
 
-RouterInterceptor.contextType = RoutesContext
+const mapStateToProps = (state, ownProps) => {
+    return {
+        routes: [...state.routes,...routersConfig]
+    }
+}
 
-export default RouterInterceptor
+export default connect(mapStateToProps)(RouterInterceptor)

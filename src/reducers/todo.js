@@ -1,21 +1,12 @@
 function todos(state=[],action){
     switch (action.type) {
         case 'add':
-            return [...state,{
-                id:action.id,
-                text:action.text,
-                completed:false
-            }]
-            break;
-        case 'toogle':
-            return state.map(todo=>{
-                if(todo.id == action.id){
-                    return Object.assign({},todo,{
-                        completed: !todo.completed
-                    })
-                }
-                return todo
+            return action.routes.map((item,i)=>{
+                return Object.assign({},item,{isAuth:true})
             })
+            break;
+        case 'remove':
+            return []
             break;
         default:
             return state

@@ -1,22 +1,11 @@
-let index = 0;
-export const add = (text)=>(
+export const add = (routes)=>(
     {
         type:'add',
-        id:index++,
-        text
+        routes
     }
 )
 
-export const toogleTodo = (id)=>(
-    {
-        type:'toogle',
-        id
-    }
-)
-
-export const setVisibilityFilter = (filter)=>(
-    {
-        type:'set_visibility',
-        filter
-    }
-)
+export const reset = ()=>({
+    type:'remove',
+    routes:[]
+})

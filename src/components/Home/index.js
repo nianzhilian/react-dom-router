@@ -7,9 +7,6 @@
  * @FilePath: \webpack-base-config\src\components\Home\index.js
  */
 import React from 'react'
-import routes from '../../routes/index'
-console.log(routes)
-
 export default ()=>(
     <div>
         这是首页
