@@ -8,16 +8,23 @@ let isAuth = () => {
   let token = localStorage.getItem("token");
   return token ? true : false;
 };
+const config = {
+  Login,
+  Layout,
+  Home,
+  NoPage,
+  Sys
+}
 const routersConfig = [
   {
     path: "/login",
-    component: Login,
+    component: "Login",
     hidden: true,
     exact: true,
   },
   {
     path: "*",
-    component: NoPage,
+    component: "NoPage",
     hidden:true
   }
 ]
@@ -25,38 +32,45 @@ const routes = [
     {
       path: "/home",
       name: "首页",
-      component: Layout,
+      component: "Layout",
       redirect: "/home/index",
       isAuth: isAuth(),
       exact: false,
       children: [
         {
           path: "/index",
-          component: Home,
+          component: "Home",
           hidden: true,
         },
         {
           path: "/sys",
-          component: Sys,
+          component: "Sys",
+          children:[
+            {
+              path: "/index2",
+              component: "Home",
+              hidden: true,
+            }
+          ]
         },
       ],
     },
     {
       path: "/system",
       name: "系统管理",
-      component: Layout,
+      component: "Layout",
       isAuth: isAuth(),
       exact: false,
       children: [
         {
           path: "/sys",
-          component: Sys,
+          component: "Sys",
         },
       ],
     },
     {
       path: "/",
-      component: Layout,
+      component:"Layout",
       redirect: "/home/index",
       isAuth: isAuth(),
       exact: true,
@@ -65,5 +79,6 @@ const routes = [
   export {
     routersConfig,
     routes,
-    NoPage
+    NoPage,
+    config
   }

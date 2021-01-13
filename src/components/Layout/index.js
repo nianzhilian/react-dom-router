@@ -41,7 +41,7 @@ class Layout extends React.Component{
                                 key={j}
                                 exact={route.exact}
                                 component={(childRoutes) => {
-                                    return <route.component {...childRoutes} />;
+                                    return <route.component {...childRoutes} />
                                 }}
                             />
                         );

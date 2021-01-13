@@ -10,19 +10,41 @@ import {
     Redirect
 } from 'react-router-dom'
 import { connect } from 'react-redux';
-import {routersConfig} from '../routes/index'
+import {routersConfig,config} from '../routes/index'
 
 
 class RouterInterceptor extends React.Component {
     constructor(props) {
         super(props)
+        this.state = {
+            completeRoutes:[]
+        }
+        //this.filterRoutes = this.filterRoutes.bind(this)
+    }
+    componentDidMount(){
+        
+    }
+    componentDidUpdate(prevP){
+        console.log(prevP)
+    }
+    filterRoutes(arr){ 
+        return arr.map((item,index)=>{
+            let a = [];
+            if(item.children){
+                a = this.filterRoutes(item.children)
+            }
+            return item.children? {...item,component:config[item.component],children:a}:{...item,component:config[item.component]}
+        })
     }
     render() {
         const {routes} = this.props;
+        const arr = Array.from(routes)
+        let completeRoutes = this.filterRoutes(arr)
+        console.log(routes)
         return (
             <Suspense fallback={<div>正在加载中</div>}>
                 <Switch>
-                    {routes.map((item, i) => {
+                    {completeRoutes.map((item, i) => {
                         return (
                             <Route
                                 path={item.path}
@@ -49,7 +71,7 @@ class RouterInterceptor extends React.Component {
                                         }
                                     } else {
                                         if (item.hidden) {
-                                            if(routerProps.location.pathname=='/'){
+                                            if(routerProps.location.pathname!='/login'){
                                                return <Redirect
                                                     to={{
                                                         pathname: "/login",
@@ -79,6 +101,7 @@ class RouterInterceptor extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
+    console.log(state)
     return {
         routes: [...state.routes,...routersConfig]
     }
